@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.sun</groupId>
+    <artifactId>springcloud-web</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.4.1.RELEASE</version>
+    </parent>
+    <!--<parent>-->
+    <!--<groupId>org.springframework.cloud</groupId>-->
+    <!--<artifactId>spring-cloud-starter-parent</artifactId>-->
+    <!--<version>Camden.SR1</version>-->
+    <!--</parent>-->
+
+    <!--<dependencyManagement>-->
+    <!--<dependencies>-->
+    <!--<dependency>-->
+    <!--<groupId>org.springframework.cloud</groupId>-->
+    <!--<artifactId>spring-cloud-dependencies</artifactId>-->
+    <!--<version>Camden.SR1</version>-->
+    <!--<type>pom</type>-->
+    <!--<scope>import</scope>-->
+    <!--</dependency>-->
+    <!--</dependencies>-->
+    <!--</dependencyManagement>-->
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!--自动部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>springloaded</artifactId>
+        </dependency>
+
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-ribbon</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- 数据库相关 -->
+        <dependency>
+            <groupId>com.jike.oracle</groupId>
+            <artifactId>ojdbc7</artifactId>
+            <version>12.1.0.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+
+        <!--SwaggerUI 自动 RestFUL-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>2.6.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>springloaded</artifactId>
+                        <version>1.2.6.RELEASE</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
+        </plugins>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <package.environment>dev</package.environment>
+                <env.database.file>config/dev/database.properties</env.database.file>
+                <env.config.file>config/dev/config.properties</env.config.file>
+                <env.rabbitmq.file>config/dev/rabbitmq.properties</env.rabbitmq.file>
+                <env.xml.job>dev/spring-config.xml</env.xml.job>
+                <env.log.console>debug</env.log.console>
+            </properties>
+            <!-- 配置默认激活（打包时不指定 -P 参数使用此打包） -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <!-- 表示发布时要打包的和不需要的资源文件,需要指明,这样才会打到包中去 -->
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>test/*</exclude>
+                            <exclude>product/*</exclude>
+                            <exclude>config/test/*</exclude>
+                            <exclude>config/product/*</exclude>
+                        </excludes>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
+        <profile>
+            <id>test</id>
+            <properties>
+                <package.environment>test</package.environment>
+                <env.database.file>config/test/database.properties</env.database.file>
+                <env.config.file>config/test/config.properties</env.config.file>
+                <env.rabbitmq.file>config/test/rabbitmq.properties</env.rabbitmq.file>
+                <env.xml.job>test/spring-config.xml</env.xml.job>
+                <env.log.console>debug</env.log.console>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>dev/*</exclude>
+                            <exclude>product/*</exclude>
+                            <exclude>config/dev/*</exclude>
+                            <exclude>config/product/*</exclude>
+                        </excludes>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+
+        <profile>
+            <id>product</id>
+            <properties>
+                <package.environment>product</package.environment>
+                <env.database.file>config/product/database.properties</env.database.file>
+                <env.config.file>config/product/config.properties</env.config.file>
+                <env.rabbitmq.file>config/product/rabbitmq.properties</env.rabbitmq.file>
+                <env.xml.job>product/spring-config.xml</env.xml.job>
+                <env.log.console>info</env.log.console>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources</directory>
+                        <excludes>
+                            <exclude>test/*</exclude>
+                            <exclude>dev/*</exclude>
+                            <exclude>config/test/*</exclude>
+                            <exclude>config/dev/*</exclude>
+                        </excludes>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+            </build>
+        </profile>
+    </profiles>
+
+
+    <distributionManagement>
+        <repository>
+            <id>nexus-releases</id>
+            <name>releases</name>
+            <url>http://szjike.f3322.net:8888/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>nexus-snapshots</id>
+            <name>snapshots</name>
+            <url>http://szjike.f3322.net:8888/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+</project>
